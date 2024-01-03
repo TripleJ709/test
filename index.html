@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    이름: <input type="text" id="name" placeholder="이름을 입력해주세요."><br>
+    생년월일: <input type="text" id="birthdate" placeholder="생년월일을 입력해주세요."><br>
+    수험번호: <input type="text" id="examNumber" placeholder="수험번호를 입력해주세요."><br>
+    <button onclick="validateData()">제출하기</button>
+
+    <script>
+        function validateData() {
+            var name = document.getElementById("name").value;
+            var birthdate = document.getElementById("birthdate").value;
+            var examNumber = document.getElementById("examNumber").value;
+
+            fetch('exam.txt')
+                .then(response => response.text())
+                .then(text => {
+                    var lines = text.split('\n');
+                    for (var line of lines) {
+                        var [filedName, filedBirthdate, filedExamNumber] = line.trim().split(' ');
+                        if (filedName === name && filedBirthdate === birthdate && filedExamNumber === examNumber) {
+                            window.location.href = 'nextpage.html'; // 다음 페이지로 이동
+                            return;
+                        }
+                    }
+                    alert('입력한 정보가 데이터와 일치하지 않습니다.');
+                })
+                .catch(error => {
+                    console.error('파일을 읽는 데 실패했습니다.', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
